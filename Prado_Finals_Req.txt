@@ -1,0 +1,44 @@
+iimport java.math.BigDecimal;
+import java.math.MathContext;
+
+public class Prado_Midterm_Req {
+    // Define the precision for BigDecimal calculations
+    private static final int PRECISION = 20;
+
+    // Calculate the natural logarithm of a number using BigDecimal
+    public static BigDecimal calculateNaturalLog(BigDecimal x) {
+        // Error Handling: Check if x is less than or equal to 0
+        if (x.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Input must be greater than 0");
+        }
+
+        BigDecimal result = BigDecimal.ZERO; // Meaningful variable names
+        BigDecimal term = BigDecimal.ONE; // Initialize the first term
+        BigDecimal factorial = BigDecimal.ONE; // Used for factorial calculations (though not utilized in this example)
+        BigDecimal xMinusOne = x.subtract(BigDecimal.ONE); // Calculate (x - 1)
+
+        // We're adding up smaller parts of a formula over and over until we get the accuracy we want for calculating the natural logarithm.
+        // Loop with a defined precision
+        for (int i = 1; i <= PRECISION; i++) {
+            // Calculate each term of the series
+            term = term.multiply(xMinusOne).divide(BigDecimal.valueOf(i), MathContext.DECIMAL128);
+            result = result.add(term);
+        }
+
+        return result; // Return the result
+    }
+
+    public static void main(String[] args) {
+        // Example number
+        BigDecimal number = new BigDecimal("5.0"); // Meaningful variable names
+        
+        // Proper error handling: Try-catch block to handle any potential IllegalArgumentException
+        try {
+            BigDecimal naturalLog = calculateNaturalLog(number);
+            System.out.println("Natural Logarithm of " + number + " is: " + naturalLog);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}
+
